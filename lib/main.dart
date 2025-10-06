@@ -10,26 +10,23 @@ import 'package:rs_ums_test/screens/akun_page.dart';
 import 'package:rs_ums_test/screens/home_screen.dart';
 import 'package:rs_ums_test/screens/jadwal_page.dart';
 import 'package:rs_ums_test/screens/presensi_page.dart';
+import 'package:rs_ums_test/screens/informasi_screen.dart';
 import 'package:rs_ums_test/utils/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   
-  // Initialize date formatting untuk bahasa Indonesia
   await initializeDateFormatting('id_ID', null);
   
-  // Set preferred orientations
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   
-  // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -39,7 +36,6 @@ void main() async {
     ),
   );
   
-  // Check if onboarding has been completed
   bool hasSeenOnboarding = false;
   try {
     final prefs = await SharedPreferences.getInstance();
@@ -63,7 +59,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'RS UMS Mobile',
       theme: ThemeData(
-        // Primary colors
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
         colorScheme: ColorScheme.fromSeed(
@@ -73,7 +68,6 @@ class MyApp extends StatelessWidget {
           error: AppColors.error,
         ),
         
-        // AppBar theme
         appBarTheme: const AppBarTheme(
           elevation: 0,
           centerTitle: false,
@@ -87,7 +81,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         
-        // BottomNavigationBar theme
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
           selectedItemColor: AppColors.primary,
@@ -103,7 +96,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         
-        // Button themes
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
@@ -129,7 +121,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         
-        // Input decoration theme
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.grey[100],
@@ -161,16 +152,13 @@ class MyApp extends StatelessWidget {
           ),
         ),
         
-        // Divider theme
         dividerTheme: const DividerThemeData(
           color: Colors.grey,
           thickness: 0.5,
         ),
         
-        // Use Material 3
         useMaterial3: true,
       ),
-      // Show onboarding or login based on preference
       home: hasSeenOnboarding ? const LoginScreen() : const OnboardingScreen(),
       routes: {
         '/onboarding': (context) => const OnboardingScreen(),
@@ -191,12 +179,12 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
   
-  // Page controller untuk smooth transition
   final PageController _pageController = PageController();
 
   final List<Widget> _pages = const [
     HomePage(),
     JadwalPage(),
+    InformasiScreen(),
     PresensiPage(),
     AkunPage(),
   ];
@@ -211,6 +199,11 @@ class _MainPageState extends State<MainPage> {
       icon: Icons.calendar_today_outlined,
       activeIcon: Icons.calendar_today,
       label: "Jadwal",
+    ),
+    NavigationItem(
+      icon: Icons.article_outlined,
+      activeIcon: Icons.article,
+      label: "Informasi",
     ),
     NavigationItem(
       icon: Icons.fingerprint_outlined,
@@ -246,7 +239,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(), // Disable swipe
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {
           setState(() {
             _currentIndex = index;
@@ -298,7 +291,6 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-// Model untuk navigation items
 class NavigationItem {
   final IconData icon;
   final IconData activeIcon;

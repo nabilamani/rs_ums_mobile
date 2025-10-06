@@ -35,3 +35,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/logo-rsums.png
+    - assets/icon/logo-google.png
