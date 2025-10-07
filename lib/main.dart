@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rs_ums_test/features/presensi/presentation/pages/presensi_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:rs_ums_test/firebase_options.dart';
 import 'package:rs_ums_test/screens/onboarding_screen.dart';
 import 'package:rs_ums_test/screens/login_screen.dart';
 import 'package:rs_ums_test/screens/akun_page.dart';
 import 'package:rs_ums_test/screens/home_screen.dart';
 import 'package:rs_ums_test/screens/jadwal_page.dart';
-import 'package:rs_ums_test/screens/presensi_page.dart';
 import 'package:rs_ums_test/screens/informasi_screen.dart';
 import 'package:rs_ums_test/utils/constants.dart';
+import 'package:rs_ums_test/features/presensi/presentation/providers/presensi_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   await initializeDateFormatting('id_ID', null);
-  
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -35,7 +35,7 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  
+
   bool hasSeenOnboarding = false;
   try {
     final prefs = await SharedPreferences.getInstance();
@@ -44,127 +44,122 @@ void main() async {
     debugPrint('Error loading preferences: $e');
     hasSeenOnboarding = false;
   }
-  
+
   runApp(MyApp(hasSeenOnboarding: hasSeenOnboarding));
 }
 
 class MyApp extends StatelessWidget {
   final bool hasSeenOnboarding;
-  
+
   const MyApp({super.key, required this.hasSeenOnboarding});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'RS UMS Mobile',
-      theme: ThemeData(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          primary: AppColors.primary,
-          secondary: AppColors.secondary,
-          error: AppColors.error,
-        ),
-        
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: false,
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.white),
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return MultiProvider(
+      providers: [
+        // Provider untuk Presensi (Clean Architecture)
+        ChangeNotifierProvider(create: (_) => PresensiProvider()),
+        // Tambahkan provider lain di sini jika diperlukan
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'RS UMS Mobile',
+        theme: ThemeData(
+          primaryColor: AppColors.primary,
+          scaffoldBackgroundColor: AppColors.background,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppColors.primary,
+            primary: AppColors.primary,
+            secondary: AppColors.secondary,
+            error: AppColors.error,
           ),
-        ),
-        
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.textSecondary,
-          type: BottomNavigationBarType.fixed,
-          elevation: 8,
-          selectedLabelStyle: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: 12,
-          ),
-        ),
-        
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
+
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            centerTitle: false,
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
-            elevation: 2,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
+            iconTheme: IconThemeData(color: Colors.white),
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Colors.white,
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor: AppColors.textSecondary,
+            type: BottomNavigationBarType.fixed,
+            elevation: 8,
+            selectedLabelStyle: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+            unselectedLabelStyle: TextStyle(fontSize: 12),
+          ),
+
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              elevation: 2,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+              ),
+            ),
+          ),
+
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+          ),
+
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Colors.grey[100],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+              borderSide: const BorderSide(color: AppColors.error, width: 1),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.paddingMedium,
               vertical: 12,
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-            ),
           ),
+
+          dividerTheme: const DividerThemeData(
+            color: Colors.grey,
+            thickness: 0.5,
+          ),
+
+          useMaterial3: true,
         ),
-        
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.primary,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-          ),
-        ),
-        
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.grey[100],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-            borderSide: const BorderSide(
-              color: AppColors.primary,
-              width: 2,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-            borderSide: const BorderSide(
-              color: AppColors.error,
-              width: 1,
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.paddingMedium,
-            vertical: 12,
-          ),
-        ),
-        
-        dividerTheme: const DividerThemeData(
-          color: Colors.grey,
-          thickness: 0.5,
-        ),
-        
-        useMaterial3: true,
+        home: hasSeenOnboarding
+            ? const LoginScreen()
+            : const OnboardingScreen(),
+        routes: {
+          '/onboarding': (context) => const OnboardingScreen(),
+          '/login': (context) => const LoginScreen(),
+          '/home': (context) => const MainPage(),
+        },
       ),
-      home: hasSeenOnboarding ? const LoginScreen() : const OnboardingScreen(),
-      routes: {
-        '/onboarding': (context) => const OnboardingScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/home': (context) => const MainPage(),
-      },
     );
   }
 }
@@ -178,7 +173,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
-  
+
   final PageController _pageController = PageController();
 
   final List<Widget> _pages = const [
@@ -188,7 +183,7 @@ class _MainPageState extends State<MainPage> {
     PresensiPage(),
     AkunPage(),
   ];
-  
+
   final List<NavigationItem> _navigationItems = const [
     NavigationItem(
       icon: Icons.home_outlined,
@@ -271,9 +266,7 @@ class _MainPageState extends State<MainPage> {
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
-            unselectedLabelStyle: const TextStyle(
-              fontSize: 12,
-            ),
+            unselectedLabelStyle: const TextStyle(fontSize: 12),
             items: _navigationItems.map((item) {
               final isSelected = _navigationItems[_currentIndex] == item;
               return BottomNavigationBarItem(

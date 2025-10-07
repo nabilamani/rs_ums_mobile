@@ -87,6 +87,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(0), // atur tinggi di sini
+        child: AppBar(
+          backgroundColor: const Color(0xFF009688),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

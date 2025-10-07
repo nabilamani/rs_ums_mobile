@@ -21,7 +21,8 @@ class _AkunPageState extends State<AkunPage> {
   }
 
   String _getUserName() {
-    if (currentUser?.displayName != null && currentUser!.displayName!.isNotEmpty) {
+    if (currentUser?.displayName != null &&
+        currentUser!.displayName!.isNotEmpty) {
       return currentUser!.displayName!;
     }
     if (currentUser?.email != null) {
@@ -38,9 +39,7 @@ class _AkunPageState extends State<AkunPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text("Keluar dari Akun"),
         content: const Text("Apakah Anda yakin ingin keluar?"),
         actions: [
@@ -50,9 +49,7 @@ class _AkunPageState extends State<AkunPage> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text("Keluar"),
           ),
         ],
@@ -74,14 +71,14 @@ class _AkunPageState extends State<AkunPage> {
   }
 
   void _showResetPasswordDialog() {
-    final emailController = TextEditingController(text: currentUser?.email ?? '');
-    
+    final emailController = TextEditingController(
+      text: currentUser?.email ?? '',
+    );
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text("Reset Password"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -116,7 +113,9 @@ class _AkunPageState extends State<AkunPage> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Link reset password telah dikirim ke email Anda'),
+                    content: Text(
+                      'Link reset password telah dikirim ke email Anda',
+                    ),
                     backgroundColor: Colors.green,
                   ),
                 );
@@ -138,19 +137,14 @@ class _AkunPageState extends State<AkunPage> {
   }
 
   void _showFAQ() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const FAQPage()),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const FAQPage()));
   }
 
   void _showAbout() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
             Container(
@@ -159,10 +153,7 @@ class _AkunPageState extends State<AkunPage> {
                 color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(
-                Icons.local_hospital,
-                color: AppColors.primary,
-              ),
+              child: const Icon(Icons.local_hospital, color: AppColors.primary),
             ),
             const SizedBox(width: 12),
             const Text("Tentang Aplikasi"),
@@ -174,16 +165,10 @@ class _AkunPageState extends State<AkunPage> {
           children: [
             Text(
               "RS UMS Mobile",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4),
-            Text(
-              "Versi 1.0.0",
-              style: TextStyle(color: Colors.grey),
-            ),
+            Text("Versi 1.0.0", style: TextStyle(color: Colors.grey)),
             SizedBox(height: 16),
             Text(
               "Aplikasi manajemen rumah sakit untuk kemudahan akses jadwal, presensi, dan informasi kesehatan.",
@@ -192,10 +177,7 @@ class _AkunPageState extends State<AkunPage> {
             SizedBox(height: 16),
             Text(
               "© 2025 Rumah Sakit UMS",
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
         ),
@@ -213,6 +195,12 @@ class _AkunPageState extends State<AkunPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(0), // atur tinggi di sini
+        child: AppBar(
+          backgroundColor: const Color(0xFF009688),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -235,10 +223,7 @@ class _AkunPageState extends State<AkunPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF009688),
-            const Color(0xFF00796B),
-          ],
+          colors: [const Color(0xFF009688), const Color(0xFF00796B)],
         ),
       ),
       child: Column(
@@ -260,15 +245,11 @@ class _AkunPageState extends State<AkunPage> {
             child: CircleAvatar(
               radius: 50,
               backgroundColor: Colors.grey[200],
-              backgroundImage: currentUser?.photoURL != null 
+              backgroundImage: currentUser?.photoURL != null
                   ? NetworkImage(currentUser!.photoURL!)
                   : null,
               child: currentUser?.photoURL == null
-                  ? Icon(
-                      Icons.person,
-                      size: 50,
-                      color: Colors.grey[400],
-                    )
+                  ? Icon(Icons.person, size: 50, color: Colors.grey[400])
                   : null,
             ),
           ),
@@ -367,7 +348,9 @@ class _AkunPageState extends State<AkunPage> {
             subtitle: "Ubah informasi profil Anda",
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Fitur edit profil akan segera hadir')),
+                const SnackBar(
+                  content: Text('Fitur edit profil akan segera hadir'),
+                ),
               );
             },
           ),
@@ -383,7 +366,9 @@ class _AkunPageState extends State<AkunPage> {
             subtitle: "Atur preferensi notifikasi",
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Fitur notifikasi akan segera hadir')),
+                const SnackBar(
+                  content: Text('Fitur notifikasi akan segera hadir'),
+                ),
               );
             },
           ),
@@ -439,7 +424,7 @@ class _AkunPageState extends State<AkunPage> {
     Color? color,
   }) {
     final itemColor = color ?? AppColors.primary;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -468,15 +453,14 @@ class _AkunPageState extends State<AkunPage> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: itemColor == AppColors.error ? itemColor : AppColors.textPrimary,
+            color: itemColor == AppColors.error
+                ? itemColor
+                : AppColors.textPrimary,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.textSecondary,
-          ),
+          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios,
@@ -506,23 +490,28 @@ class FAQPage extends StatelessWidget {
         children: [
           _buildFAQItem(
             question: "Bagaimana cara melakukan presensi?",
-            answer: "Buka menu Presensi, lalu gunakan fitur fingerprint atau scan QR code yang tersedia di lokasi kerja Anda.",
+            answer:
+                "Buka menu Presensi, lalu gunakan fitur fingerprint atau scan QR code yang tersedia di lokasi kerja Anda.",
           ),
           _buildFAQItem(
             question: "Bagaimana melihat jadwal kerja saya?",
-            answer: "Anda dapat melihat jadwal kerja di menu Jadwal. Jadwal akan ditampilkan berdasarkan bulan dan dapat difilter sesuai kebutuhan.",
+            answer:
+                "Anda dapat melihat jadwal kerja di menu Jadwal. Jadwal akan ditampilkan berdasarkan bulan dan dapat difilter sesuai kebutuhan.",
           ),
           _buildFAQItem(
             question: "Apa yang harus dilakukan jika lupa password?",
-            answer: "Gunakan fitur Reset Password di halaman Akun atau klik 'Lupa Password' di halaman login untuk mendapatkan link reset via email.",
+            answer:
+                "Gunakan fitur Reset Password di halaman Akun atau klik 'Lupa Password' di halaman login untuk mendapatkan link reset via email.",
           ),
           _buildFAQItem(
             question: "Bagaimana cara mengubah informasi profil?",
-            answer: "Buka menu Akun, pilih Edit Profil, lalu update informasi yang ingin diubah dan simpan perubahan.",
+            answer:
+                "Buka menu Akun, pilih Edit Profil, lalu update informasi yang ingin diubah dan simpan perubahan.",
           ),
           _buildFAQItem(
             question: "Siapa yang bisa saya hubungi untuk bantuan teknis?",
-            answer: "Anda dapat menghubungi IT Support RS UMS di nomor (0271) 717500 ext. 123 atau email support@rs-ums.ac.id",
+            answer:
+                "Anda dapat menghubungi IT Support RS UMS di nomor (0271) 717500 ext. 123 atau email support@rs-ums.ac.id",
           ),
         ],
       ),
